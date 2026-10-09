@@ -15,6 +15,9 @@
                     <x-breeze.nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-breeze.nav-link>
+                    <x-breeze.nav-link :href="route('userzone.measurements.index')" :active="request()->routeIs('userzone.measurements.*')">
+                        Measurements
+                    </x-breeze.nav-link>
                 </div>
             </div>
 

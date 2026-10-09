@@ -1,0 +1,34 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl">Measurements</h2>
+    </x-slot>
+
+    <div class="max-w-4xl mx-auto py-8 px-4">
+        <table class="w-full bg-white border">
+            <tr class="text-left border-b">
+                <th class="p-2">Date</th>
+                <th class="p-2">Patient</th>
+                <th class="p-2">Biomarker</th>
+                <th class="p-2">Value</th>
+                <th class="p-2">Status</th>
+            </tr>
+            @forelse($measurements as $measurement)
+                <tr class="border-b">
+                    <td class="p-2">{{ $measurement->measured_at->format('d.m.Y') }}</td>
+                    <td class="p-2">{{ $measurement->user->name }}</td>
+                    <td class="p-2">{{ $measurement->biomarker->name }}</td>
+                    <td class="p-2">{{ $measurement->value }} {{ $measurement->biomarker->unit }}</td>
+                    <td class="p-2">
+                        @if($measurement->isOptimal())
+                            <span class="text-green-700">Optimal</span>
+                        @else
+                            <span class="text-red-600">Not optimal</span>
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr><td class="p-2" colspan="5">No measurements yet.</td></tr>
+            @endforelse
+        </table>
+    </div>
+</x-app-layout>
