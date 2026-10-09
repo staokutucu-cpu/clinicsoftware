@@ -9,6 +9,17 @@
             @method('PUT')
 
             <div>
+                <label class="block font-semibold">Patient*</label>
+                <select name="user_id" class="border w-full p-2">
+                    <option value="">-- choose --</option>
+                    @foreach($patients as $patient)
+                        <option value="{{ $patient->id }}" @selected(old('user_id', $measurement->user_id) == $patient->id)>{{ $patient->name }}</option>
+                    @endforeach
+                </select>
+                @error('user_id') <div class="text-red-600 text-sm">{{ $message }}</div> @enderror
+            </div>
+
+            <div>
                 <label class="block font-semibold">Biomarker*</label>
                 <select name="biomarker_id" class="border w-full p-2">
                     <option value="">-- choose --</option>
@@ -26,7 +37,7 @@
             </div>
 
             <div>
-                <label class="block font-semibold">Date of measurement*</label>
+                <label class="block font-semibold">Date the blood was taken*</label>
                 <input type="date" name="measured_at" value="{{ old('measured_at', $measurement->measured_at->format('Y-m-d')) }}" class="border w-full p-2">
                 @error('measured_at') <div class="text-red-600 text-sm">{{ $message }}</div> @enderror
             </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Userzone;
 use App\Http\Controllers\Controller;
 use App\Models\Biomarker;
 use App\Models\Measurement;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MeasurementController extends Controller
@@ -25,23 +26,36 @@ class MeasurementController extends Controller
     // Show an empty form to add a new measurement
     public function create()
     {
-        $biomarkers = Biomarker::orderBy('name')->get();
+        // Only a doctor can enter measurements
+        if (! auth()->user()->is_doctor) {
+            abort(403);
+        }
 
-        return view('userzone.measurements.create', compact('biomarkers'));
+        $biomarkers = Biomarker::orderBy('name')->get();
+        $patients = User::where('is_doctor', false)->orderBy('name')->get();
+
+        return view('userzone.measurements.create', compact('biomarkers', 'patients'));
     }
 
     // Save the input from the create form
     public function store(Request $request)
     {
+        // Only a doctor can enter measurements
+        if (! auth()->user()->is_doctor) {
+            abort(403);
+        }
+
         $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
             'biomarker_id' => ['required', 'exists:biomarkers,id'],
             'value' => ['required', 'numeric', 'min:0'],
             'measured_at' => ['required', 'date', 'before_or_equal:today'],
             'note' => ['nullable', 'string', 'max:500'],
         ]);
 
-        // The new measurement always belongs to the logged in user
-        auth()->user()->measurements()->create([
+        // The doctor enters the measurement for the chosen patient
+        Measurement::create([
+            'user_id' => $request['user_id'],
             'biomarker_id' => $request['biomarker_id'],
             'value' => $request['value'],
             'measured_at' => $request['measured_at'],
@@ -54,7 +68,7 @@ class MeasurementController extends Controller
     // Details of one measurement
     public function show(Measurement $measurement)
     {
-        if (! $measurement->canChange(auth()->user())) {
+        if (! $measurement->canView(auth()->user())) {
             abort(403);
         }
 
@@ -69,8 +83,9 @@ class MeasurementController extends Controller
         }
 
         $biomarkers = Biomarker::orderBy('name')->get();
+        $patients = User::where('is_doctor', false)->orderBy('name')->get();
 
-        return view('userzone.measurements.edit', compact('measurement', 'biomarkers'));
+        return view('userzone.measurements.edit', compact('measurement', 'biomarkers', 'patients'));
     }
 
     // Save the input from the edit form
@@ -81,6 +96,7 @@ class MeasurementController extends Controller
         }
 
         $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
             'biomarker_id' => ['required', 'exists:biomarkers,id'],
             'value' => ['required', 'numeric', 'min:0'],
             'measured_at' => ['required', 'date', 'before_or_equal:today'],
@@ -88,6 +104,7 @@ class MeasurementController extends Controller
         ]);
 
         $measurement->update([
+            'user_id' => $request['user_id'],
             'biomarker_id' => $request['biomarker_id'],
             'value' => $request['value'],
             'measured_at' => $request['measured_at'],
