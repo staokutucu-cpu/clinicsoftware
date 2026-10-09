@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\BiomarkerController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public routes
+Route::get('/', [WelcomeController::class, 'index'])->name('home');
+
+Route::get('biomarkers', [BiomarkerController::class, 'index'])->name('biomarkers.index');
+Route::get('biomarkers/{biomarker}', [BiomarkerController::class, 'show'])->name('biomarkers.show');
 
 Route::get('/dashboard', function () {
     return view('userzone.dashboard');
