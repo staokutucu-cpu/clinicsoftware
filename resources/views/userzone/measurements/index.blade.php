@@ -4,6 +4,8 @@
     </x-slot>
 
     <div class="max-w-4xl mx-auto py-8 px-4">
+        <a href="{{ route('userzone.measurements.create') }}" class="inline-block bg-green-700 text-white px-4 py-2 rounded mb-4">Add measurement</a>
+
         <table class="w-full bg-white border">
             <tr class="text-left border-b">
                 <th class="p-2">Date</th>

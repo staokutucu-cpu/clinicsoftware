@@ -17,6 +17,8 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     // CRUD for measurements
     Route::get('userzone/measurements', [App\Http\Controllers\Userzone\MeasurementController::class, 'index'])->name('userzone.measurements.index');
+    Route::get('userzone/measurements/create', [App\Http\Controllers\Userzone\MeasurementController::class, 'create'])->name('userzone.measurements.create');
+    Route::post('userzone/measurements', [App\Http\Controllers\Userzone\MeasurementController::class, 'store'])->name('userzone.measurements.store');
 
     Route::get('/profile', [App\Http\Controllers\Userzone\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\Userzone\ProfileController::class, 'update'])->name('profile.update');
