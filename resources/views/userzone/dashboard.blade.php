@@ -9,9 +9,9 @@
             <p class="text-lg">Hello {{ auth()->user()->name }}!</p>
 
             @if(auth()->user()->is_doctor)
-                <p>You are logged in as a <strong>doctor</strong>. You can see the measurements of all patients.</p>
+                <p>You are logged in as a <strong>doctor</strong>. You can enter, change and delete the measurements of all patients.</p>
             @else
-                <p>You have {{ auth()->user()->measurements()->count() }} measurements.</p>
+                <p>Your doctor has entered {{ auth()->user()->measurements()->count() }} measurements for you.</p>
             @endif
 
             <a href="{{ route('userzone.measurements.index') }}" class="inline-block bg-green-700 text-white px-4 py-2 rounded">Go to measurements</a>
