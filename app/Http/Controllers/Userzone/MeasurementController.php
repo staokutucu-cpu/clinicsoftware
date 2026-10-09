@@ -51,4 +51,32 @@ class MeasurementController extends Controller
     {
         return view('userzone.measurements.show', compact('measurement'));
     }
+
+    // Show the form to change an existing measurement
+    public function edit(Measurement $measurement)
+    {
+        $biomarkers = Biomarker::orderBy('name')->get();
+
+        return view('userzone.measurements.edit', compact('measurement', 'biomarkers'));
+    }
+
+    // Save the input from the edit form
+    public function update(Request $request, Measurement $measurement)
+    {
+        $request->validate([
+            'biomarker_id' => ['required', 'exists:biomarkers,id'],
+            'value' => ['required', 'numeric', 'min:0'],
+            'measured_at' => ['required', 'date', 'before_or_equal:today'],
+            'note' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $measurement->update([
+            'biomarker_id' => $request['biomarker_id'],
+            'value' => $request['value'],
+            'measured_at' => $request['measured_at'],
+            'note' => $request['note'],
+        ]);
+
+        return redirect()->route('userzone.measurements.index');
+    }
 }

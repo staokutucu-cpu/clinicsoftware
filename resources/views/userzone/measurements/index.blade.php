@@ -13,6 +13,7 @@
                 <th class="p-2">Biomarker</th>
                 <th class="p-2">Value</th>
                 <th class="p-2">Status</th>
+                <th class="p-2"></th>
             </tr>
             @forelse($measurements as $measurement)
                 <tr class="border-b">
@@ -29,9 +30,12 @@
                             <span class="text-red-600">Not optimal</span>
                         @endif
                     </td>
+                    <td class="p-2">
+                        <a href="{{ route('userzone.measurements.edit', $measurement) }}" class="text-green-700 underline">Edit</a>
+                    </td>
                 </tr>
             @empty
-                <tr><td class="p-2" colspan="5">No measurements yet.</td></tr>
+                <tr><td class="p-2" colspan="6">No measurements yet.</td></tr>
             @endforelse
         </table>
     </div>
