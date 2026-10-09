@@ -4,11 +4,13 @@
     </x-slot>
 
     <div class="max-w-4xl mx-auto py-8 px-4">
-        <a href="{{ route('userzone.measurements.create') }}" class="inline-block bg-green-700 text-white px-4 py-2 rounded mb-4">Add measurement</a>
+        @if(auth()->user()->is_doctor)
+            <a href="{{ route('userzone.measurements.create') }}" class="inline-block bg-green-700 text-white px-4 py-2 rounded mb-4">Add measurement</a>
+        @endif
 
         <table class="w-full bg-white border">
             <tr class="text-left border-b">
-                <th class="p-2">Date</th>
+                <th class="p-2">Date taken</th>
                 <th class="p-2">Patient</th>
                 <th class="p-2">Biomarker</th>
                 <th class="p-2">Value</th>
@@ -31,12 +33,14 @@
                         @endif
                     </td>
                     <td class="p-2">
+                        @if($measurement->canChange(auth()->user()))
                         <a href="{{ route('userzone.measurements.edit', $measurement) }}" class="text-green-700 underline">Edit</a>
                         <form action="{{ route('userzone.measurements.destroy', $measurement) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 underline ml-2">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @empty
