@@ -10,7 +10,7 @@ class Measurement extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['biomarker_id', 'value', 'measured_at', 'note'];
+    protected $fillable = ['user_id', 'biomarker_id', 'value', 'measured_at', 'note'];
 
     protected $casts = ['measured_at' => 'date'];
 
@@ -33,9 +33,15 @@ class Measurement extends Model
             && $this->value <= $this->biomarker->optimal_max;
     }
 
-    // Business logic: only the patient who owns it, or a doctor, can see and change a measurement
-    public function canChange(User $user): bool
+    // Business logic: a patient can see their own measurement, a doctor can see all
+    public function canView(User $user): bool
     {
         return $user->is_doctor || $this->user_id === $user->id;
+    }
+
+    // Business logic: only a doctor can add, change or delete measurements
+    public function canChange(User $user): bool
+    {
+        return $user->is_doctor;
     }
 }
