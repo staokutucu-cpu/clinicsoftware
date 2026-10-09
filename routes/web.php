@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('userzone/measurements/{measurement}', [App\Http\Controllers\Userzone\MeasurementController::class, 'show'])->name('userzone.measurements.show');
     Route::get('userzone/measurements/{measurement}/edit', [App\Http\Controllers\Userzone\MeasurementController::class, 'edit'])->name('userzone.measurements.edit');
     Route::put('userzone/measurements/{measurement}', [App\Http\Controllers\Userzone\MeasurementController::class, 'update'])->name('userzone.measurements.update');
+    Route::delete('userzone/measurements/{measurement}', [App\Http\Controllers\Userzone\MeasurementController::class, 'destroy'])->name('userzone.measurements.destroy');
 
     Route::get('/profile', [App\Http\Controllers\Userzone\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\Userzone\ProfileController::class, 'update'])->name('profile.update');

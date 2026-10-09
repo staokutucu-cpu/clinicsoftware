@@ -79,4 +79,12 @@ class MeasurementController extends Controller
 
         return redirect()->route('userzone.measurements.index');
     }
+
+    // Delete a measurement
+    public function destroy(Measurement $measurement)
+    {
+        $measurement->delete();
+
+        return redirect()->route('userzone.measurements.index');
+    }
 }

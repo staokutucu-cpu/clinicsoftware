@@ -32,6 +32,11 @@
                     </td>
                     <td class="p-2">
                         <a href="{{ route('userzone.measurements.edit', $measurement) }}" class="text-green-700 underline">Edit</a>
+                        <form action="{{ route('userzone.measurements.destroy', $measurement) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 underline ml-2">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @empty
