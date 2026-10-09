@@ -12,7 +12,12 @@ class MeasurementController extends Controller
     // List of the measurements
     public function index()
     {
-        $measurements = Measurement::with('biomarker', 'user')->orderByDesc('measured_at')->get();
+        // A doctor sees the measurements of all patients, a patient only sees their own
+        if (auth()->user()->is_doctor) {
+            $measurements = Measurement::with('biomarker', 'user')->orderByDesc('measured_at')->get();
+        } else {
+            $measurements = auth()->user()->measurements()->with('biomarker', 'user')->orderByDesc('measured_at')->get();
+        }
 
         return view('userzone.measurements.index', compact('measurements'));
     }
@@ -49,12 +54,20 @@ class MeasurementController extends Controller
     // Details of one measurement
     public function show(Measurement $measurement)
     {
+        if (! $measurement->canChange(auth()->user())) {
+            abort(403);
+        }
+
         return view('userzone.measurements.show', compact('measurement'));
     }
 
     // Show the form to change an existing measurement
     public function edit(Measurement $measurement)
     {
+        if (! $measurement->canChange(auth()->user())) {
+            abort(403);
+        }
+
         $biomarkers = Biomarker::orderBy('name')->get();
 
         return view('userzone.measurements.edit', compact('measurement', 'biomarkers'));
@@ -63,6 +76,10 @@ class MeasurementController extends Controller
     // Save the input from the edit form
     public function update(Request $request, Measurement $measurement)
     {
+        if (! $measurement->canChange(auth()->user())) {
+            abort(403);
+        }
+
         $request->validate([
             'biomarker_id' => ['required', 'exists:biomarkers,id'],
             'value' => ['required', 'numeric', 'min:0'],
@@ -83,6 +100,10 @@ class MeasurementController extends Controller
     // Delete a measurement
     public function destroy(Measurement $measurement)
     {
+        if (! $measurement->canChange(auth()->user())) {
+            abort(403);
+        }
+
         $measurement->delete();
 
         return redirect()->route('userzone.measurements.index');

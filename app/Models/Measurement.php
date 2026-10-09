@@ -32,4 +32,10 @@ class Measurement extends Model
         return $this->value >= $this->biomarker->optimal_min
             && $this->value <= $this->biomarker->optimal_max;
     }
+
+    // Business logic: only the patient who owns it, or a doctor, can see and change a measurement
+    public function canChange(User $user): bool
+    {
+        return $user->is_doctor || $this->user_id === $user->id;
+    }
 }
