@@ -45,4 +45,10 @@ class MeasurementController extends Controller
 
         return redirect()->route('userzone.measurements.index');
     }
+
+    // Details of one measurement
+    public function show(Measurement $measurement)
+    {
+        return view('userzone.measurements.show', compact('measurement'));
+    }
 }

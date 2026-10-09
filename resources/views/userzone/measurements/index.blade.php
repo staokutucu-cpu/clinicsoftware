@@ -16,7 +16,9 @@
             </tr>
             @forelse($measurements as $measurement)
                 <tr class="border-b">
-                    <td class="p-2">{{ $measurement->measured_at->format('d.m.Y') }}</td>
+                    <td class="p-2">
+                        <a href="{{ route('userzone.measurements.show', $measurement) }}" class="text-green-700 underline">{{ $measurement->measured_at->format('d.m.Y') }}</a>
+                    </td>
                     <td class="p-2">{{ $measurement->user->name }}</td>
                     <td class="p-2">{{ $measurement->biomarker->name }}</td>
                     <td class="p-2">{{ $measurement->value }} {{ $measurement->biomarker->unit }}</td>
