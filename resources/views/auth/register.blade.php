@@ -39,6 +39,14 @@
             <x-breeze.input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- Role: patient or doctor -->
+        <div class="mt-4">
+            <x-breeze.input-label :value="'I register as'" />
+            <label class="me-4"><input type="radio" name="role" value="patient" @checked(old('role', 'patient') === 'patient')> Patient</label>
+            <label><input type="radio" name="role" value="doctor" @checked(old('role') === 'doctor')> Doctor</label>
+            <x-breeze.input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
